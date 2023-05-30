@@ -1,3 +1,5 @@
+package game;
+import stack.*;
 import java.util.Scanner;
 
 public class Game {
@@ -9,18 +11,31 @@ public class Game {
     public void play(){
         Scanner scan = new Scanner(System.in);
         int maxLength = 6;
-    
-        System.out.println("Com quantos discos deseja jogar? ");
-        maxLength = scan.nextInt();
-            
+        String temp;
+        boolean test = false;
+        
+        while(test == false){
+            System.out.println("Com quantos discos deseja jogar? ");
+            temp = scan.nextLine();
+            try{
+                maxLength = Integer.parseInt(temp);
+                test = true;
+
+            }catch(Exception e){
+                System.out.println("Entrada inválida");
+                test = false;
+            }
+
+        }
+        
         initGame(maxLength);
         
         while(!chekWin(maxLength)){
             String move;
-
+            System.out.println(printGame(maxLength));
             System.out.println("Faça a jogada. Ex:'ab', 'bc'");
             move = scan.nextLine();
-      
+            
             switch(move.toUpperCase()){
                 case "AB":
                     validatePlay(stack, stack2);
@@ -43,7 +58,7 @@ public class Game {
                 default:
                     System.out.println("Insira uma jogada valida");
             }
-           System.out.println(printGame(maxLength));
+          
         }
         System.out.println("VITÓRIA !!");
         System.out.println("Foram "+ plays +" movimentos");
@@ -51,15 +66,13 @@ public class Game {
         scan.close();
     }
     public static String printGame(int maxLength){
-        
-
         String tower1[] = new String [maxLength];
         String tower2[] = new String[maxLength];
         String tower3[] = new String[maxLength];
 
-        tower1 = renderTowers2(tower1, stack);
-        tower2 = renderTowers2(tower2, stack2);
-        tower3 = renderTowers2(tower3, stack3);
+        tower1 = renderTowers(tower1, stack);
+        tower2 = renderTowers(tower2, stack2);
+        tower3 = renderTowers(tower3, stack3);
  
         String test = "";
 
@@ -106,20 +119,11 @@ public class Game {
         return stack3.getLength() == maxLength;
     }
     
-    public static String[] renderTowers(String[] tower, Node<Integer>temp, Node<Integer>aux, Stack<Integer>stack){
-        for (int i = stack.getLength() -1; i >= 0; i--) {
-
-            tower[i] = temp.getInfo().toString();
-
-            temp = temp.getInfo() == 0 ? aux : (temp.getPrevious() == null ? aux : temp.getPrevious());
-        }
-        return tower;
-    }
-    public static String[] renderTowers2(String[] tower, Stack<Integer>stack){
+    public static String[] renderTowers(String[] tower, Stack<Integer>stack){
         Node<Integer> aux = new Node<Integer>(0);
         aux.setPrevious(aux);
         Node<Integer> temp = stack.getTop();
-        
+
         for (int i = stack.getLength() -1; i >= 0; i--) {
 
             tower[i] = temp.getInfo().toString();

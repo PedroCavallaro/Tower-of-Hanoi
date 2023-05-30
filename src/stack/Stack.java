@@ -1,3 +1,4 @@
+package stack;
 public class Stack<T extends Comparable<T>>{
     private int length;
     private Node<T> top;
