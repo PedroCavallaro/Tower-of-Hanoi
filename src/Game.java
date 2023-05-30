@@ -43,39 +43,39 @@ public class Game {
                 default:
                     System.out.println("Insira uma jogada valida");
             }
-           System.out.println(p2(maxLength));
+           System.out.println(printGame(maxLength));
         }
         System.out.println("VITÓRIA !!");
         System.out.println("Foram "+ plays +" movimentos");
+
         scan.close();
     }
-    public static String p2(int maxLength){
-        Node<Integer> aux = new Node<Integer>(0);
-        aux.setPrevious(aux);
-        Node<Integer> temp = stack.getTop() == null ? aux : stack.getTop();
-        Node<Integer> temp2 = stack2.getTop() == null ? aux : stack2.getTop();
-        Node<Integer> temp3 = stack3.getTop() == null ? aux : stack3.getTop(); 
+    public static String printGame(int maxLength){
+        
 
+        String tower1[] = new String [maxLength];
+        String tower2[] = new String[maxLength];
+        String tower3[] = new String[maxLength];
+
+        tower1 = renderTowers2(tower1, stack);
+        tower2 = renderTowers2(tower2, stack2);
+        tower3 = renderTowers2(tower3, stack3);
+ 
         String test = "";
-        for(int i = 0; i < maxLength; i ++){
-            int disk1 = temp.getInfo();
-            int disk2 = temp2.getInfo();
-            int disk3 = temp3.getInfo();
 
-            test += "\n" + disk1
+        for(int i = maxLength -1; i >=0; i--){
+    
+            test += "\n" + 
+            (tower1[i] == null ? "-" : tower1[i])
             +"\t" + 
-            disk2
+            (tower2[i] == null ? "-" : tower2[i])
             + "\t" + 
-            disk3;
-
-          
-            temp = temp.getInfo() == 0 ? aux : (temp.getPrevious() == null ? aux : temp.getPrevious()) ; 
-            temp2 = temp2.getInfo() == 0 ? aux: (temp2.getPrevious() == null ? aux : temp2.getPrevious());
-            temp3 = temp3.getInfo() == 0 ? aux: (temp3.getPrevious() == null ? aux : temp3.getPrevious());
+            (tower3[i] == null ? "-" : tower3[i]);
             
         }  
-        test += "\n" + "-------------------\n"
+        test += "\n-------------------\n"
         + "A" + "\t" + "B" + "\t" + "C";
+
         return test;
         
     }
@@ -104,13 +104,36 @@ public class Game {
     }
     public static boolean chekWin(int maxLength){
         return stack3.getLength() == maxLength;
-}
+    }
+    
+    public static String[] renderTowers(String[] tower, Node<Integer>temp, Node<Integer>aux, Stack<Integer>stack){
+        for (int i = stack.getLength() -1; i >= 0; i--) {
+
+            tower[i] = temp.getInfo().toString();
+
+            temp = temp.getInfo() == 0 ? aux : (temp.getPrevious() == null ? aux : temp.getPrevious());
+        }
+        return tower;
+    }
+    public static String[] renderTowers2(String[] tower, Stack<Integer>stack){
+        Node<Integer> aux = new Node<Integer>(0);
+        aux.setPrevious(aux);
+        Node<Integer> temp = stack.getTop();
+        
+        for (int i = stack.getLength() -1; i >= 0; i--) {
+
+            tower[i] = temp.getInfo().toString();
+
+            temp = temp.getInfo() == 0 ? aux : (temp.getPrevious() == null ? aux : temp.getPrevious());
+        }
+        return tower;
+    }
 
     public static void initGame(int maxLength){
         for (int i = maxLength; i > 0; i--) {
             stack.putOnTop(i);
+        }
     }
-}
     public static int getPlays() {
         return plays;
     }

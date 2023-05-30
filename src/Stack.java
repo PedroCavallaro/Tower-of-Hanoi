@@ -57,7 +57,10 @@ public class Stack<T extends Comparable<T>>{
         this.length = length;
     }
     public Node<T> getTop() {
-        return top;
+        if(!isEmpty()){
+            return top;
+        }
+        return null;
     }
     public void setTop(Node<T> top) {
         this.top = top;
